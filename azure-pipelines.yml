@@ -1,0 +1,32 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  name: default
+
+# schedules:
+#   - cron: '* * * * *'
+#     displayName: 'every 60 seconds'
+#     always: true
+#     branches:
+#       include:
+#         - main
+
+trigger:
+ branches:
+   include:
+     - main
+variables:
+  mySourceRepo: 'https://PAT@dev.azure.com/Org/Proj/_git/repo'
+  myDestRepo: 'http://windows-server/DefaultCollection/Org/_git/repo-mirror'
+  destPAT: ''
+
+steps:
+
+- task: PowerShell@2
+  displayName: 'mirror remote to other remote'
+  inputs:
+    filePath: 'mirror.ps1'
+    arguments: '-sourceRepo "$(mySourceRepo)" -destRepo "$(myDestRepo)" -pat "$(destPAT)"'
